@@ -198,7 +198,7 @@ AFRAME.registerComponent('enter-room', {
     }
 });
 
-// component rotating on the Y-axes with the camera
+//Component rotating on the Y-axes with the camera.
 AFRAME.registerComponent('rotate-with-camera', {
     init: function () {
         this.cameraEl = document.querySelector('a-camera');
@@ -209,7 +209,7 @@ AFRAME.registerComponent('rotate-with-camera', {
     }
 });
 
-// component linking to URL
+// Component linking to external URL.
 AFRAME.registerComponent('outlink', {
     schema: {
         url: {
@@ -218,9 +218,8 @@ AFRAME.registerComponent('outlink', {
         },
     },
     init: function () {
-        var data = this.data;
         this.el.addEventListener('click', function (evt) {
-            window.open(data.url, "_self")
+            window.open(this.data.url, "_self")
         });
     }
 });
