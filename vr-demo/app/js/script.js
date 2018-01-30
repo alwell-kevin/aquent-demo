@@ -1,5 +1,5 @@
-var TIMESTAMP = null;
-var LOCATION = 'entrance'; //starting position
+var TIMESTAMP = null,
+    LOCATION = 'entrance'; //starting position
 
 //Return 'Location' URL Parameter
 const getParameterByName = (name) => {
@@ -14,11 +14,11 @@ const onLoad = () => {
         console.log('starting location set to: ' + getParameterByName("location"));
         setTimeout(() => {
 
-            var targetEl = document.querySelector('a-sky');
-            var newLocation = getParameterByName("location");
-            var newLocationID = "#" + newLocation;
-            var image = document.getElementById(newLocation);
-            var offsetY = image.getAttribute("offset-y");
+            var targetEl = document.querySelector('a-sky'),
+                newLocation = getParameterByName("location"),
+                newLocationID = "#" + newLocation,
+                image = document.getElementById(newLocation),
+                offsetY = image.getAttribute("offset-y");
 
             navigate(newLocationID);
 
@@ -39,8 +39,10 @@ const onLoad = () => {
 //Set Markers related to the 'Location'.
 const navigate = (loc) => {
     var oldNav,
-        skyObj = document.querySelector('a-sky').components.material;
+        skyObj = document.querySelector('a-sky').components.material,
+        nav = loc.replace("#", "nav_");
 
+    //Ensure sky obj has material assigned.
     if (skyObj) {
         oldNav = "nav_" + skyObj.oldData.src.id;
     } else {
@@ -50,13 +52,12 @@ const navigate = (loc) => {
     console.log("oldNav :" + oldNav);
     document.getElementById(oldNav).setAttribute('visible', 'false');
     document.getElementById(oldNav).setAttribute('scale', '0.1 0.1 0.1');
-    var nav = loc.replace("#", "nav_");
     console.log("nav :" + nav);
     document.getElementById(nav).setAttribute('visible', 'true');
     document.getElementById(nav).setAttribute('scale', '1 1 1');
 }
 
-// Clickable marker component
+// Makes clickable elements more interactive.
 AFRAME.registerComponent('marker', {
     schema: {
         icon: {
@@ -85,12 +86,13 @@ AFRAME.registerComponent('marker', {
         }
     },
     init: function () {
-        var data = this.data;
-        var el = this.el;
+        var data = this.data,
+            el = this.el;
 
         el.setAttribute('rotation', `0 ${data.yRot} 0`);
         el.setAttribute('position', `0 ${data.yPos} 0`);
 
+        //Create, Position, Style 'Marker' UI-Elements.
         var marker = document.createElement("a-entity");
         marker.setAttribute('geometry', 'primitive: plane; width:0.25; height: 0.25;');
         marker.setAttribute('material', `shader: flat; transparent:true; opacity: 0.75; color: ${data.leaveColor}; src: #${data.icon}`);
@@ -110,7 +112,8 @@ AFRAME.registerComponent('marker', {
     }
 });
 
-// Component to change sky on click and set markers/hotspots.
+// Component to change sky on click.
+// Sets markers/hotspots.
 AFRAME.registerComponent('enter-room', {
     schema: {
         on: {
@@ -131,9 +134,9 @@ AFRAME.registerComponent('enter-room', {
     },
 
     init: function () {
-        var data = this.data;
-        var el = this.el;
-        var targetEl = this.data.target;
+        var data = this.data,
+            el = this.el,
+            targetEl = this.data.target;
 
         this.setupFadeAnimation();
 
@@ -141,9 +144,9 @@ AFRAME.registerComponent('enter-room', {
 
             if (TIMESTAMP == null || TIMESTAMP + 1000 < evt.timeStamp) {
 
-                var imageID = data.src.replace("#", "");
-                var image = document.getElementById(imageID);
-                var offsetY = image.getAttribute("offset-y");
+                var imageID = data.src.replace("#", ""),
+                    image = document.getElementById(imageID),
+                    offsetY = image.getAttribute("offset-y");
 
                 // Fade out image.
                 targetEl.emit('fade-image-out');
@@ -198,7 +201,7 @@ AFRAME.registerComponent('enter-room', {
 // component rotating on the Y-axes with the camera
 AFRAME.registerComponent('rotate-with-camera', {
     init: function () {
-        var cameraEl = this.cameraEl = document.querySelector('a-camera');
+        this.cameraEl = document.querySelector('a-camera');
     },
     tick: function () {
         var rotation = this.cameraEl.object3D.getWorldRotation();
