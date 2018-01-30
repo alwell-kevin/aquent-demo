@@ -35,7 +35,7 @@ gulp.task('useref', function() {
 
   return gulp.src('app/*.html')
     .pipe(useref())
-    .pipe(gulpIf('*.js', uglify()))
+    .pipe(gulpIf(['*.js', '!*.min.js'], uglify()))
     .pipe(gulp.dest('dist'));
 });
 
